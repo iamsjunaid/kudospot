@@ -25,7 +25,6 @@ const sendKudos = async (req, res) => {
 // @desc    Retrieve Kudos for a User
 // @route   GET /api/kudos/:email
 const getKudosForUser = async (req, res) => {
-    console.log("🔍 Fetching Kudos for User...");
   const { email } = req.params;
 
   const kudos = await Kudos.find({ receiver: email });
@@ -37,8 +36,6 @@ const getKudosForUser = async (req, res) => {
 // @route   GET /api/kudos/analytics
 const getKudosAnalytics = async (req, res) => {
   try {
-    console.log("🔍 Fetching Kudos Analytics...");
-
     const analytics = await Kudos.aggregate([
       {
         $group: {
@@ -49,15 +46,12 @@ const getKudosAnalytics = async (req, res) => {
       { $sort: { totalKudos: -1 } },
     ]);
 
-    console.log("📊 Analytics Result:", analytics);
-
     if (!analytics || analytics.length === 0) {
       return res.json({ message: "No Kudos data available", analytics: [] });
     }
 
     res.json({ analytics });
   } catch (error) {
-    console.error("❌ Error fetching analytics:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
