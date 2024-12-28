@@ -4,9 +4,9 @@ const User = require("../models/User");
 // @desc    Send Kudos
 // @route   POST /api/kudos/send
 const sendKudos = async (req, res) => {
-  const { sender, receiver, message } = req.body;
+  const { sender, receiver, message, badge } = req.body;
 
-  // Check if sender and receiver exist
+  // Validate sender and receiver exist
   const senderUser = await User.findOne({ email: sender });
   const receiverUser = await User.findOne({ email: receiver });
 
@@ -16,10 +16,14 @@ const sendKudos = async (req, res) => {
       .json({ message: "Invalid sender or receiver email" });
   }
 
-  const kudos = new Kudos({ sender, receiver, message });
+  if (!badge) {
+    return res.status(400).json({ message: "Badge is required" });
+  }
+
+  const kudos = new Kudos({ sender, receiver, message, badge });
   await kudos.save();
 
-  res.status(201).json({ message: "Kudos sent successfully" });
+  res.status(201).json({ message: "Kudos sent successfully with badge!" });
 };
 
 // @desc    Retrieve Kudos for a User
