@@ -29,7 +29,7 @@ export default function AnalyticsPage() {
     const fetchAnalytics = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/kudos/analytics"
+          "https://kudospot-r8os.onrender.com/api/kudos/analytics"
         );
         const data = await response.json();
 
