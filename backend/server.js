@@ -19,7 +19,7 @@ const kudosRoutes = require("./routes/kudosRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/kudos", kudosRoutes);
 
-const allowedOrigins = ["http://localhost:3000", "https://kudospot-ten.vercel.app/"];
+const allowedOrigins = ["http://localhost:3000", "https://kudospot-r8os.onrender.com"];
 
 app.use(cors({
   origin: allowedOrigins,
