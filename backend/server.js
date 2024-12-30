@@ -19,6 +19,14 @@ const kudosRoutes = require("./routes/kudosRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/kudos", kudosRoutes);
 
+const allowedOrigins = ["http://localhost:3000", "https://kudospot-ten.vercel.app/"];
+
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
+
 // Start server only after DB is connected
 connectDB().then(() => {
   const PORT = process.env.PORT || 5000;
