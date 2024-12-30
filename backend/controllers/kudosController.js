@@ -61,30 +61,36 @@ const getKudosForUser = async (req, res) => {
 // };
 // kudosController.js
 
+// kudosController.js
+
 const getKudosAnalytics = async (req, res) => {
   try {
     const leaderboard = await Kudos.aggregate([
       { $group: { _id: "$receiver", totalKudos: { $sum: 1 } } },
-      { $sort: { totalKudos: -1 } }
+      { $sort: { totalKudos: -1 } },
     ]);
 
     const badgeAnalytics = await Kudos.aggregate([
       { $group: { _id: "$badge", badgeCount: { $sum: 1 } } },
-      { $sort: { badgeCount: -1 } }
+      { $sort: { badgeCount: -1 } },
     ]);
+
+    const badgeData = badgeAnalytics.map((item) => ({
+      badge: item._id,
+      count: item.badgeCount,
+    }));
 
     const mostLikedPost = await Kudos.findOne().sort({ likes: -1 }).limit(1);
 
     res.json({
       leaderboard,
-      badgeAnalytics,
-      mostLikedPost
+      badgeAnalytics: badgeData,
+      mostLikedPost,
     });
   } catch (error) {
     console.error("Error fetching analytics:", error);
     res.status(500).json({ error: "Failed to fetch analytics data" });
   }
 };
-
 
 module.exports = { sendKudos, getKudosForUser, getKudosAnalytics };
