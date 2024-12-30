@@ -103,6 +103,9 @@ Visit `http://localhost:3000` in your browser.
 - Kudos Leaderboard
 - Most Liked Post
 
+## 🌍 Live Demo
+- [Kudospot](https://kudospot-ten.vercel.app/)
+
 ## 📄 Assumptions
 - Predefined user emails: `alice@example.com`, `bob@example.com`
 - Database is hosted on MongoDB Atlas.
