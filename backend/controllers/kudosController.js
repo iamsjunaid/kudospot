@@ -38,26 +38,53 @@ const getKudosForUser = async (req, res) => {
 
 // @desc    Kudos Analytics
 // @route   GET /api/kudos/analytics
+// const getKudosAnalytics = async (req, res) => {
+//   try {
+//     const analytics = await Kudos.aggregate([
+//       {
+//         $group: {
+//           _id: "$receiver",
+//           totalKudos: { $sum: 1 },
+//         },
+//       },
+//       { $sort: { totalKudos: -1 } },
+//     ]);
+
+//     if (!analytics || analytics.length === 0) {
+//       return res.json({ message: "No Kudos data available", analytics: [] });
+//     }
+
+//     res.json({ analytics });
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// };
+// kudosController.js
+
 const getKudosAnalytics = async (req, res) => {
   try {
-    const analytics = await Kudos.aggregate([
-      {
-        $group: {
-          _id: "$receiver",
-          totalKudos: { $sum: 1 },
-        },
-      },
-      { $sort: { totalKudos: -1 } },
+    const leaderboard = await Kudos.aggregate([
+      { $group: { _id: "$receiver", totalKudos: { $sum: 1 } } },
+      { $sort: { totalKudos: -1 } }
     ]);
 
-    if (!analytics || analytics.length === 0) {
-      return res.json({ message: "No Kudos data available", analytics: [] });
-    }
+    const badgeAnalytics = await Kudos.aggregate([
+      { $group: { _id: "$badge", badgeCount: { $sum: 1 } } },
+      { $sort: { badgeCount: -1 } }
+    ]);
 
-    res.json({ analytics });
+    const mostLikedPost = await Kudos.findOne().sort({ likes: -1 }).limit(1);
+
+    res.json({
+      leaderboard,
+      badgeAnalytics,
+      mostLikedPost
+    });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error("Error fetching analytics:", error);
+    res.status(500).json({ error: "Failed to fetch analytics data" });
   }
 };
+
 
 module.exports = { sendKudos, getKudosForUser, getKudosAnalytics };

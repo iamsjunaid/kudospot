@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { UserProvider } from "./context/UserContext";
+import Welcome from "./pages/Welcome";
+import Landing from "./pages/Landing";
+import GiveKudos from "./pages/GiveKudos";
+import Analytics from "./pages/Analytics";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-50">
+          <Routes>
+            <Route path="/" element={<Welcome />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route path="/give-kudos" element={<GiveKudos />} />
+            <Route path="/analytics" element={<Analytics />} />
+          </Routes>
+        </div>
+      </Router>
+    </UserProvider>
   );
 }
 
